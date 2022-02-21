@@ -4,9 +4,11 @@ exports.createTask = (request, response) => {
     task: request.body.task,
     done: false
   };
+  
+  
   const db = connectDb();
   db.collection('tasks').add(newTask)
-    .then(doc => response.status(201).send(doc.id))
+    .then(doc => response.status(201).json({id:doc.id}))  // I changed this so it would return json
     .catch(err => response.status(500).send(err));
 }
 exports.getTasks = (request, response) => {
@@ -18,7 +20,7 @@ exports.getTasks = (request, response) => {
         task.id = doc.id;
         return task;
       })
-      response.send(taskList);
+      response.json(taskList);
     })
     .catch(err => response.status(500).send(err));
 }
